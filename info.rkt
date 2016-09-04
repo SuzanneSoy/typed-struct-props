@@ -14,5 +14,5 @@
                  " in Typed/Racket. The API should hopefully stay"
                  " backward-compatible when Typed/Racket officially supports"
                  " (or rejects) structure type properties."))
-(define version "0.0")
+(define version "1.0")
 (define pkg-authors '("Georges Dupéron"))
