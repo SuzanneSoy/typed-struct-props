@@ -7,24 +7,40 @@
 
 @defmodule[typed-struct-props]
 
-@defform[#:literals (: prop:custom-write )
+@defform[#:literals (: prop:custom-write prop:equal+hash)
          (struct/props maybe-type-vars name ([field : type] ...) options ...)
          #:grammar
          [(maybe-type-vars (code:line)
                            (v ...))
           (options #:transparent
                    (code:line #:property prop:custom-write custom-write)
-                   (code:line #:equal+hash equal+hash))]
+                   (code:line #:property prop:equal+hash equal+hash))]
          #:contracts ([custom-write
-                       (∀ (v ...)
+                       (→ name                    (code:comment "non-polymorphic case")
+                          Output-Port
+                          (U #t #f 0 1)
+                          Any)]
+                      [custom-write
+                       (∀ (v ...)                 (code:comment "polymorphic case")
                           (→ (name v ...)
                              Output-Port
                              (U #t #f 0 1)
                              Any))]
                       [equal+hash
-                       (List (∀ (v ... |v'| ...)
+                       (List (→ name                (code:comment "non-polymorphic case")
+                                name
+                                (→ Any Any Boolean)
+                                Any)
+                             (→ v
+                                (→ Any Integer)
+                                Integer)
+                             (→ v
+                                (→ Any Integer)
+                                Integer))]
+                      [equal+hash
+                       (List (∀ (v ... v2 ...)      (code:comment "polymorphic case")
                                 (→ (name v ...)
-                                   (name |v'| ...)
+                                   (name v2 ...)
                                    (→ Any Any Boolean)
                                    Any))
                              (∀ (v ...)
@@ -37,6 +53,11 @@
                                    Integer)))])]{
  This form defines a @racketmodname[typed/racket] struct type, and accepts a
  small subset of @racketmodname[racket]'s struct type properties.
+
+ For @racket[prop:custom-write] and @racket[prop:equal+hash], the function
+ types are polymorphic only if the struct is polymorphic (i.e. 
+ @racket[maybe-type-vars] is present) and has at least one type variable (i.e. 
+ @racket[maybe-type-vars] is not just @racket[()]).
 
  It implements these struct type properties in a type-safe manner: the current
  implementation in @racketmodname[typed/racket] does not properly type-check
