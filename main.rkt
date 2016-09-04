@@ -13,13 +13,14 @@
 
 (define-syntax struct/props
   (syntax-parser
-    [(_ (~optional (~and polymorphic (T ...)))
-        name
-        (~and fields ([field (~literal :) type] ...))
+    [(_ (~optional (~and polymorphic (T:id ...)))
+        name:id
+        (~optional parent:id)
+        (~and fields ([field:id (~literal :) type] ...))
         (~or
          (~optional (~and transparent #:transparent))
-         (~optional (~seq #:property (~literal prop:custom-write) custom-write))
-         (~optional (~seq #:property (~literal prop:equal+hash) equal+hash)))
+         (~optional (~seq #:property (~literal prop:custom-write) custom-write:expr))
+         (~optional (~seq #:property (~literal prop:equal+hash) equal+hash:expr)))
         ...)
      (define poly? (and (attribute polymorphic) (not (stx-null? #'(T ...)))))
 
@@ -73,6 +74,7 @@
      
          (struct #,@(when-attr polymorphic (T ...))
            name
+           #,@(when-attr parent parent)
            fields
            #,@(when-attr transparent #:transparent)
            #,@(when-attr custom-write #:property prop:custom-write printer)

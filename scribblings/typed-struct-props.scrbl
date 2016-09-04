@@ -8,10 +8,13 @@
 @defmodule[typed-struct-props]
 
 @defform[#:literals (: prop:custom-write prop:equal+hash)
-         (struct/props maybe-type-vars name ([field : type] ...) options ...)
+         (struct/props maybe-type-vars name maybe-parent ([field : type] ...)
+                       options ...)
          #:grammar
          [(maybe-type-vars (code:line)
                            (v ...))
+          (maybe-parent (code:line)
+                        parent-id)
           (options #:transparent
                    (code:line #:property prop:custom-write custom-write)
                    (code:line #:property prop:equal+hash equal+hash))]
