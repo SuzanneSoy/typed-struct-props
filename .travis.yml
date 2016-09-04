@@ -40,7 +40,7 @@ before_install:
 
 install:
  - raco pkg install --deps search-auto
- - raco setup --check-pkg-deps --pkgs typed-struct-props
+ - if test "$RACKET_VERSION" != "6.0"; then raco setup --check-pkg-deps --pkgs typed-struct-props; fi
 
 before_script:
 
