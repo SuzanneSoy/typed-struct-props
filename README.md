@@ -11,3 +11,8 @@ Typed/Racket.
 * The API should hopefully remain stable, even if struct type properties
   become supported (this library will then become a wrapper) or forbidden in
   Typed/Racket (this library will then use typed/racket/unsafe tricks).
+
+Currently, the following properties are supported:
+
+* prop:custom-write
+* prop:equal+hash
