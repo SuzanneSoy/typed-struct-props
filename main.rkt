@@ -1,35 +1,80 @@
-#lang racket/base
+#lang typed/racket
 
-(module+ test
-  (require rackunit))
+(provide struct/props)
 
-;; Notice
-;; To install (from within the package directory):
-;;   $ raco pkg install
-;; To install (once uploaded to pkgs.racket-lang.org):
-;;   $ raco pkg install <<name>>
-;; To uninstall:
-;;   $ raco pkg remove <<name>>
-;; To view documentation:
-;;   $ raco docs <<name>>
-;;
-;; For your convenience, we have included a LICENSE.txt file, which links to
-;; the GNU Lesser General Public License.
-;; If you would prefer to use a different license, replace LICENSE.txt with the
-;; desired license.
-;;
-;; Some users like to add a `private/` directory, place auxiliary files there,
-;; and require them in `main.rkt`.
-;;
-;; See the current version of the racket style guide here:
-;; http://docs.racket-lang.org/style/index.html
+(require (for-syntax racket/syntax
+                     racket/function
+                     syntax/parse
+                     syntax/stx))
 
-;; Code here
+(begin-for-syntax
+  (define-syntax-rule (when-attr name . rest)
+    (if (attribute name) #`rest #'())))
 
-(module+ test
-  ;; Tests to be run with raco test
-  )
+(define-syntax struct/props
+  (syntax-parser
+    [(_ (~optional (~and polymorphic (T ...)))
+        name
+        (~and fields ([field (~literal :) type] ...))
+        (~or
+         (~optional (~and transparent #:transparent))
+         (~optional (~seq #:property (~literal prop:custom-write) custom-write))
+         (~optional (~seq #:property (~literal prop:equal+hash) equal+hash)))
+        ...)
+     (define poly? (and (attribute polymorphic) (not (stx-null? #'(T ...)))))
 
-(module+ main
-  ;; Main entry point, executed when run with the `racket` executable or DrRacket.
-  )
+     (define maybe-∀
+       (if poly?
+           (λ (result-stx) #`(∀ (T ...) #,result-stx))
+           (λ (result-stx) result-stx)))
+     
+     (define/with-syntax (T2 ...)
+       (if poly?
+           (stx-map (λ (t) (format-id #'here "~a-2" t)) #'(T ...))
+           #'(_unused)))
+     (define maybe-∀2
+       (if poly?
+           (λ (result-stx) #`(∀ (T ... T2 ...) #,result-stx))
+           (λ (result-stx) result-stx)))
+     
+     (define/with-syntax ins
+       (if poly? #'(name T ...) #'name))
+
+     (define/with-syntax ins2
+       (if poly? #'(name T2 ...) #'name))
+     
+     #`(begin
+         #,@(when-attr custom-write
+              (: printer #,(maybe-∀ #'(→ ins Output-Port (U #t #f 0 1) Any)))
+              (define printer custom-write))
+         #,@(if (attribute equal+hash)
+                (let ()
+                  (define/with-syntax equal+hash-ann
+                    (syntax-parse #'equal+hash
+                      [((~and list (~literal list)) equal? hash1 hash2)
+                       #`(list (ann equal?
+                                    #,(maybe-∀2
+                                       #'(→ ins ins2 (→ Any Any Boolean) Any)))
+                               (ann hash1
+                                    #,(maybe-∀
+                                       #'(→ ins (→ Any Integer) Integer)))
+                               (ann hash2
+                                    #,(maybe-∀
+                                       #'(→ ins (→ Any Integer) Integer))))]
+                      [expr:expr #'expr]))
+                  #`((: eq+h (List #,(maybe-∀2
+                                      #'(→ ins ins2 (→ Any Any Boolean) Any))
+                                   #,(maybe-∀
+                                      #'(→ ins (→ Any Integer) Integer))
+                                   #,(maybe-∀
+                                      #'(→ ins (→ Any Integer) Integer))))
+                     (define eq+h equal+hash-ann)))
+                #'())
+     
+         (struct #,@(when-attr polymorphic (T ...))
+           name
+           fields
+           #,@(when-attr transparent #:transparent)
+           #,@(when-attr custom-write #:property prop:custom-write printer)
+           #,@(when-attr equal+hash #:property prop:equal+hash eq+h)))]))
+
