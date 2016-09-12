@@ -58,17 +58,17 @@
                                        #'(→ ins ins2 (→ Any Any Boolean) Any)))
                                (ann hash1
                                     #,(maybe-∀
-                                       #'(→ ins (→ Any Integer) Integer)))
+                                       #'(→ ins (→ Any Fixnum) Fixnum)))
                                (ann hash2
                                     #,(maybe-∀
-                                       #'(→ ins (→ Any Integer) Integer))))]
+                                       #'(→ ins (→ Any Fixnum) Fixnum))))]
                       [expr:expr #'expr]))
                   #`((: eq+h (List #,(maybe-∀2
                                       #'(→ ins ins2 (→ Any Any Boolean) Any))
                                    #,(maybe-∀
-                                      #'(→ ins (→ Any Integer) Integer))
+                                      #'(→ ins (→ Any Fixnum) Fixnum))
                                    #,(maybe-∀
-                                      #'(→ ins (→ Any Integer) Integer))))
+                                      #'(→ ins (→ Any Fixnum) Fixnum))))
                      (define eq+h equal+hash-ann)))
                 #'())
      
