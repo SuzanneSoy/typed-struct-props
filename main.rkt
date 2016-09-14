@@ -47,30 +47,28 @@
 
      (define/with-syntax ins2
        (if poly? #'(name T2 ...) #'name))
+
+     (define/with-syntax PrinterType
+       (maybe-∀ #'(→ ins Output-Port (U #t #f 0 1) Any)))
+     (define/with-syntax ComparerType-Equal
+       (maybe-∀2 #'(→ ins ins2 (→ Any Any Boolean) Any)))
+     (define/with-syntax ComparerType-Hash1
+       (maybe-∀ #'(→ ins (→ Any Fixnum) Fixnum)))
+     (define/with-syntax ComparerType-Hash2
+       (maybe-∀ #'(→ ins (→ Any Fixnum) Fixnum)))
+     (define/with-syntax ComparerType
+       #'(List ComparerType-Equal
+               ComparerType-Hash1
+               ComparerType-Hash2))
      
      #`(begin
          #,@(when-attr custom-write
-              (define-type PrinterType
-                #,(maybe-∀ #'(→ ins Output-Port (U #t #f 0 1) Any)))
               (: printer PrinterType)
               (: printer-implementation PrinterType)
               (define (printer self port mode)
                 (printer-implementation self port mode)))
          
          #,@(when-attr equal+hash
-              (define-type ComparerType-Equal
-                #,(maybe-∀2
-                   #'(→ ins ins2 (→ Any Any Boolean) Any)))
-              (define-type ComparerType-Hash1
-                #,(maybe-∀
-                   #'(→ ins (→ Any Fixnum) Fixnum)))
-              (define-type ComparerType-Hash2
-                #,(maybe-∀
-                   #'(→ ins (→ Any Fixnum) Fixnum)))
-              (define-type ComparerType
-                (List ComparerType-Equal
-                      ComparerType-Hash1
-                      ComparerType-Hash2))
               (: eq+h ComparerType)
               (: eq+h-implementation (→ ComparerType))
               (define eq+h
