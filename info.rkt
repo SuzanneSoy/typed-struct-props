@@ -3,7 +3,8 @@
 (define deps '("base"
                "rackunit-lib"
                "typed-racket-lib"
-               "typed-racket-more"))
+               "typed-racket-more"
+               "type-expander"))
 (define build-deps '("scribble-lib"
                      "racket-doc"
                      "typed-racket-doc"))
