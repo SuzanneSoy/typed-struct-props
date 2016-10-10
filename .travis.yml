@@ -50,7 +50,7 @@ before_script:
 # `raco pkg install --deps search-auto` to install any required
 # packages without it getting stuck on a confirmation prompt.
 script:
- - raco test -x -p typed-struct-props
+ - raco test -p typed-struct-props
  - if test "$RACKET_VERSION" != "6.0"; then raco setup --check-pkg-deps --pkgs typed-struct-props; fi
  - raco pkg install --deps search-auto doc-coverage
  - if test "$RACKET_VERSION" != "6.2" -a "$RACKET_VERSION" != "6.3"; then raco doc-coverage typed-struct-props; fi
