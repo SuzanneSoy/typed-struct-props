@@ -55,9 +55,9 @@
       (define/with-syntax ComparerType-Equal
         (maybe-∀2 #'(→ ins ins2 (→ Any Any Boolean) Any)))
       (define/with-syntax ComparerType-Hash1
-        (maybe-∀ #'(→ ins (→ Any Fixnum) Fixnum)))
+        (maybe-∀ #'(→ ins (→ Any Integer) Integer)))
       (define/with-syntax ComparerType-Hash2
-        (maybe-∀ #'(→ ins (→ Any Fixnum) Fixnum)))
+        (maybe-∀ #'(→ ins (→ Any Integer) Integer)))
       (define/with-syntax ComparerType
         #'(List ComparerType-Equal
                 ComparerType-Hash1
@@ -102,10 +102,10 @@
                                         #'(→ ins ins2 (→ Any Any Boolean) Any)))
                                 (ann hash1
                                      #,(maybe-∀
-                                        #'(→ ins (→ Any Fixnum) Fixnum)))
+                                        #'(→ ins (→ Any Integer) Integer)))
                                 (ann hash2
                                      #,(maybe-∀
-                                        #'(→ ins (→ Any Fixnum) Fixnum))))]
+                                        #'(→ ins (→ Any Integer) Integer))))]
                        [expr:expr #'expr]))
                    #`(define eq+h-implementation (λ () equal+hash-ann)))))])))
 
