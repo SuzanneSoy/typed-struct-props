@@ -3,7 +3,7 @@
                     racket/base]]
 
 @title{Struct type properties for Typed/Racket}
-@author[@author+email["Georges Dupéron" "georges.duperon@gmail.com"]]
+@author[@author+email["Suzanne Soy" "racket@suzanne.soy"]]
 
 @defmodule[typed-struct-props]
 

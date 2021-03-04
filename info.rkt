@@ -16,4 +16,4 @@
                  " backward-compatible when Typed/Racket officially supports"
                  " (or rejects) structure type properties."))
 (define version "1.0")
-(define pkg-authors '("Georges Dupéron"))
+(define pkg-authors '("Suzanne Soy"))
