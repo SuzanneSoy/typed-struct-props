@@ -1,5 +1,5 @@
-[![Build Status,](https://img.shields.io/travis/jsmaniac/typed-struct-props/master.svg)](https://travis-ci.org/jsmaniac/typed-struct-props)
-[![Coverage Status,](https://img.shields.io/codecov/c/github/jsmaniac/typed-struct-props/master.svg)](https://codecov.io/gh/jsmaniac/typed-struct-props)
+[![Build Status,](https://img.shields.io/travis/jsmaniac/typed-struct-props/main.svg)](https://travis-ci.org/jsmaniac/typed-struct-props)
+[![Coverage Status,](https://img.shields.io/codecov/c/github/jsmaniac/typed-struct-props/main.svg)](https://codecov.io/gh/jsmaniac/typed-struct-props)
 [![Build Stats,](https://img.shields.io/badge/build-stats-blue.svg)](http://jsmaniac.github.io/travis-stats/#jsmaniac/typed-struct-props)
 [![Online Documentation,](https://img.shields.io/badge/docs-online-blue.svg)](http://docs.racket-lang.org/typed-struct-props/)
 [![Maintained as of 2018,](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/jsmaniac/typed-struct-props/issues)
